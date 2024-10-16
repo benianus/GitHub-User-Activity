@@ -5,6 +5,7 @@ public class GithubUserActivity
     public static void Main()
     {
         Logic.ChoosingOption();
+        Console.ReadKey();
     }
 }
 
