@@ -1,39 +1,10 @@
-﻿using System;
-using System.Diagnostics;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Json;
-using GitHub_User_Activity.Data;
-using Hypermedia.JsonApi.Client;
-using JsonLite;
-using Microsoft.AspNetCore.Http;
+﻿using GitHub_User_Activity.Logic;
 
 public class GithubUserActivity
 {
-
-    public static async Task Main()
+    public static void Main()
     {
-
-        await DataSource.GetUserActivities(GetUsername());
-        
-        Console.ReadLine();
-        
+        Logic.ChoosingOption();
     }
-
-    private static string? GetUsername()
-    {
-        Console.WriteLine("--- Get Github User Actvity ---");
-        Console.Write("Please, Enter your Github Username: ");
-
-        string? username = Console.ReadLine();
-
-        if (username != null)
-        {
-            return username;
-        }
-
-        return null;
-    }
-
 }
 

@@ -1,51 +1,127 @@
-﻿using System.Net.Http.Json;
+﻿using GitHub_User_Activity.EventTypes;
+using System.Net.Http.Json;
 
-namespace GitHub_User_Activity.Data
+namespace GitHub_User_Activity.Data;
+public class DataSource
 {
-    public class DataSource
+    public static readonly HttpClient client = new HttpClient();
+    public static async Task GetAllUserActivities(string? username)
     {
+        client.BaseAddress = new Uri("https://api.github.com/users/");
+        client.DefaultRequestHeaders.Add("User-Agent", "CSharpApp");
 
-        public static readonly HttpClient client = new HttpClient();
-        public static async Task GetUserActivities(string? username)
+        if (username == null) {
+            Console.WriteLine("Error, username is required!");
+            return;
+        }
+
+        try
         {
-            client.BaseAddress = new Uri("https://api.github.com/users/");
-            client.DefaultRequestHeaders.Add("User-Agent", "CSharpApp");
+            var response = await client.GetAsync($"{username}/events");
 
-            if (username == null) {
-                Console.WriteLine("Error, username is required!");
-                return;
-            }
-
-            try
+            if (response.IsSuccessStatusCode) 
             {
-                var events = await client.GetFromJsonAsync<List<Activities>>($"{username}/events");
+                var events = await response.Content.ReadFromJsonAsync<List<Activities>>();
 
-                if (events?.Count > 0)
+                if (events != null)
                 {
-                    Console.WriteLine("\nOutput:");
                     foreach (var activity in events)
                     {
-                        if(activity?.payload?.commits?[0].message == null)
+                        if (activity?.payload?.commits?[0].message == null)
                         {
-                            System.Console.WriteLine($"- [Without commit message] to {activity?.repo?.name}");
+                            System.Console.WriteLine($"- {activity?.type} [Without commit message] to {activity?.repo?.name}");
                         }
                         else
                         {
-                            System.Console.WriteLine($"- {activity?.payload?.commits?[0].message} to {activity?.repo?.name}");
+                            System.Console.WriteLine($"- {activity?.type} {activity?.payload?.commits?[0].message} to {activity?.repo?.name}");
+                        }
+                    }
+                }
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
+            {
+                Console.WriteLine("Not modified");
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            {
+                Console.WriteLine("Forbidden");
+            }
+            else if(response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable)
+            {
+                Console.WriteLine("Service Unavailable");
+            }
+            else
+            {
+                Console.WriteLine("Not Found");
+            }
+
+        }
+        catch (Exception error)
+        {
+            Console.WriteLine(error.Message);
+        }
+    }
+    public static async Task GetUserActivityByEventType(string? eventType, string? username)
+    {
+        client.BaseAddress = new Uri("https://api.github.com/users/");
+        client.DefaultRequestHeaders.Add("User-Agent", "CSharpApp");
+
+        if (username == null)
+        {
+            Console.WriteLine("Error, username is required!");
+            return;
+        }
+
+        try
+        {
+            var response = await client.GetAsync($"{username}/events");
+            List<Activities> activities = new List<Activities>();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var events = await response.Content.ReadFromJsonAsync<List<Activities>>();
+                if (events != null)
+                {
+                    foreach (var activity in events)
+                    {
+                        if (activity.type == eventType)
+                        {
+                            if (activity?.payload?.commits?[0].message == null)
+                            {
+                                System.Console.WriteLine($"- {activity?.type} [Without commit message] to {activity?.repo?.name}");
+                            }
+                            else
+                            {
+                                System.Console.WriteLine($"- {activity?.type} {activity?.payload?.commits?[0].message} to {activity?.repo?.name}");
+                            }
                         }
                     }
                 }
                 else
                 {
-                    System.Console.WriteLine("List is empty");
+                    Console.WriteLine("Event list empty");
                 }
             }
-            catch (Exception error)
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
             {
-                Console.WriteLine(error.Message);
+                Console.WriteLine("Not modified");
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            {
+                Console.WriteLine("Forbidden");
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable)
+            {
+                Console.WriteLine("Service Unavailable");
+            }
+            else
+            {
+                Console.WriteLine("Not Found");
             }
         }
-
-       
+        catch (Exception error)
+        {
+            Console.WriteLine(error.Message);
+        }
     }
 }
