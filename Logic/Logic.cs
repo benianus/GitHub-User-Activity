@@ -173,14 +173,17 @@ public static class Logic
     }
     private static void BackToEventsTypeMenu()
     {
-        Console.WriteLine("Press any key to go back to main menu");
+        Console.WriteLine("\nPress any key to go back to main menu");
         Console.ReadKey();
         Console.Clear();
         ChoosingOption();
     }
     private static void BackToMainMenu()
     {
-
+        Console.WriteLine("\nPress any key to go back to main menu");
+        Console.ReadKey();
+        Console.Clear();
+        ChooseEventType();
     }
     private static int? IsNumberBewtween(int? choice)
     {
