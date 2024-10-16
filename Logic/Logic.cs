@@ -149,7 +149,6 @@ public static class Logic
             case Features.enFeatures.getAll:
                 Console.Clear();
                 await DataSource.GetAllUserActivities(GetUsername());
-                BackToMainMenu();
                 break;
             case Features.enFeatures.getByEventType:
                 Console.Clear();
