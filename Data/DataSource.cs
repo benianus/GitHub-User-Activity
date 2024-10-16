@@ -2,13 +2,13 @@
 using System.Net.Http.Json;
 
 namespace GitHub_User_Activity.Data;
-public class DataSource
+public static class DataSource
 {
     public static readonly HttpClient client = new HttpClient();
     public static async Task GetAllUserActivities(string? username)
     {
-        client.BaseAddress = new Uri("https://api.github.com/users/");
         client.DefaultRequestHeaders.Add("User-Agent", "CSharpApp");
+        client.BaseAddress = new Uri("https://api.github.com/users/");
 
         if (username == null) {
             Console.WriteLine("Error, username is required!");
@@ -25,11 +25,13 @@ public class DataSource
 
                 if (events != null)
                 {
+                    Console.WriteLine("\nOutput:");
+
                     foreach (var activity in events)
                     {
                         if (activity?.payload?.commits?[0].message == null)
                         {
-                            System.Console.WriteLine($"- {activity?.type} [Without commit message] to {activity?.repo?.name}");
+                            System.Console.WriteLine($"- {activity?.type} to {activity?.repo?.name}");
                         }
                         else
                         {
@@ -65,7 +67,6 @@ public class DataSource
     {
         client.BaseAddress = new Uri("https://api.github.com/users/");
         client.DefaultRequestHeaders.Add("User-Agent", "CSharpApp");
-
         if (username == null)
         {
             Console.WriteLine("Error, username is required!");
@@ -75,24 +76,26 @@ public class DataSource
         try
         {
             var response = await client.GetAsync($"{username}/events");
-            List<Activities> activities = new List<Activities>();
 
             if (response.IsSuccessStatusCode)
             {
                 var events = await response.Content.ReadFromJsonAsync<List<Activities>>();
+                
                 if (events != null)
                 {
+                    Console.WriteLine("\nOutput:");
+
                     foreach (var activity in events)
                     {
                         if (activity.type == eventType)
                         {
                             if (activity?.payload?.commits?[0].message == null)
                             {
-                                System.Console.WriteLine($"- {activity?.type} [Without commit message] to {activity?.repo?.name}");
+                                System.Console.WriteLine($"- {eventType} to {activity?.repo?.name}");
                             }
                             else
                             {
-                                System.Console.WriteLine($"- {activity?.type} {activity?.payload?.commits?[0].message} to {activity?.repo?.name}");
+                                System.Console.WriteLine($"- {eventType} {activity?.payload?.commits?[0].message} to {activity?.repo?.name}");
                             }
                         }
                     }
@@ -123,5 +126,6 @@ public class DataSource
         {
             Console.WriteLine(error.Message);
         }
+
     }
 }

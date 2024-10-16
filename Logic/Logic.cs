@@ -39,6 +39,7 @@ public static class Logic
     }
     private static void ChooseEventType()
     {
+        Console.Clear();    
         Console.WriteLine("--- Event Types: ---");
         Console.WriteLine("1 - Commit Comment Event");
         Console.WriteLine("2 - Create Event");
@@ -59,7 +60,7 @@ public static class Logic
         Console.WriteLine("17 - Watch Event");
         Console.WriteLine("18 - Return to Main Menu");
         Console.WriteLine("---------------------------------");
-        Console.WriteLine("Please enter your choice [1] to [18]");
+        Console.Write("Please enter your choice [1] to [18]: ");
         int? choice = Convert.ToInt32(Console.ReadLine());
         PerformEventOptionChoice((EventsEnum.enEventsType?)choice);
     }
@@ -77,63 +78,63 @@ public static class Logic
                 break;
             case EventsEnum.enEventsType.DeleteEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("DeleteEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.ForkEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("ForkEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.GollumEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("GollumEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.IssueCommentEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("IssueCommentEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.IssuesEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("IssuesEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.MemberEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("MemberEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.PublicEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("PublicEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.PullRequestEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("PullRequestEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.PullRequestReviewEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("PullRequestReviewEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.PullRequestReviewCommentEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("PullRequestReviewCommentEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.PullRequestReviewThreadEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("PullRequestReviewThreadEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.PushEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("PushEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.ReleaseEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("ReleaseEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.SponsorshipEvent:
                 Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("SponsorshipEvent", GetUsername());
                 break;
             case EventsEnum.enEventsType.WatchEvent:
-                Console.Clear();
-                await DataSource.GetUserActivityByEventType("CreateEvent", GetUsername());
+                await DataSource.GetUserActivityByEventType("WatchEvent", GetUsername());
+                
                 break;
             default:
                 Console.Clear();
@@ -148,6 +149,7 @@ public static class Logic
             case Features.enFeatures.getAll:
                 Console.Clear();
                 await DataSource.GetAllUserActivities(GetUsername());
+                BackToMainMenu();
                 break;
             case Features.enFeatures.getByEventType:
                 Console.Clear();
@@ -168,6 +170,17 @@ public static class Logic
     {
         Console.WriteLine("Feature not implemented yet!");
         Console.ReadLine();
+    }
+    private static void BackToEventsTypeMenu()
+    {
+        Console.WriteLine("Press any key to go back to main menu");
+        Console.ReadKey();
+        Console.Clear();
+        ChoosingOption();
+    }
+    private static void BackToMainMenu()
+    {
+
     }
     private static int? IsNumberBewtween(int? choice)
     {

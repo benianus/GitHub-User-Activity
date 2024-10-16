@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GitHub_User_Activity.EventTypes;
+﻿namespace GitHub_User_Activity.EventTypes;
 
 public static class EventsEnum
 {
